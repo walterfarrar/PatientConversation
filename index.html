@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Patient Consultation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Virtual Patient Consultation</h1>
+        </header>
+        
+        <main>
+            <div class="content-wrapper">
+                <div class="conversation-container">
+                    <div class="patient-info">
+                        <div class="avatar">👤</div>
+                        <div class="patient-details">
+                            <h2 id="patient-name">Patient</h2>
+                            <p id="patient-age"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-area">
+                        <div id="conversation-history" class="conversation-history"></div>
+                        
+                        <div class="options-container">
+                            <div id="response-options" class="response-options"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <h3>Available Tests</h3>
+                    <div class="test-buttons">
+                        <!-- Test buttons will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Test Results Modal -->
+    <div id="test-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="test-title"></h2>
+            <div id="test-results"></div>
+            <button id="close-test-results">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
