@@ -6,359 +6,195 @@
     },
     "tests": {
         "cbc": {
-            "name": "Complete Blood Count",
-            "unlocks_at": "symptom_duration",
+            "name": "Special Blood Test",
+            "unlocks_at": ["left_foot"],
             "results": {
-                "title": "CBC Results",
-                "content": "• Hemoglobin: 11.2 g/dL (Low)\n• MCV: 78 fL (Low)\n• Ferritin: 15 ng/mL (Low)\n• Folate: 4.0 ng/mL (Normal)\n• B12: 300 pg/mL (Normal)\n• Indicates iron deficiency anemia",
-                "unlocks_dialogue": [
-                    "cbc_results"
-                ]
+                "title": "Special Blood Test Results",
+                "content": "• Elevated Osteoclast Activity Factor: 345 u/L (Normal <120)\n• Localized Bone Density Reduction: Detected in left foot only\n• Asymmetric Growth Hormone Receptor Expression: Present\n• Unilateral Atrophy Markers: Positive\n• Consistent with Focal Osseous Reduction Syndrome",
+                "unlocks_dialogue": ["foot_results"]
             }
         },
         "ttg-iga": {
-            "name": "tTG-IgA Antibody Test",
-            "unlocks_at": "diet_questions",
+            "name": "Blue Vision Chromatic Perception Test",
+            "unlocks_at": ["blue_tint"],
             "results": {
-                "title": "Celiac Serology Results",
-                "content": "• Tissue Transglutaminase IgA: 45 U/mL (Positive >10)\n• Total IgA: 120 mg/dL (Normal)\n• Strongly suggests Celiac Disease",
-                "unlocks_dialogue": [
-                    "ttg-iga_results"
-                ]
-            }
-        },
-        "ema": {
-            "name": "Endomysial Antibody Test",
-            "unlocks_at": "ttg-iga_results",
-            "results": {
-                "title": "EMA Test Results",
-                "content": "• IgA Endomysial Antibody: Positive\n• Pattern consistent with Celiac Disease",
-                "unlocks_dialogue": [
-                    "ema_results"
-                ]
-            }
-        },
-        "endoscopy": {
-            "name": "Endoscopy with Biopsy",
-            "unlocks_at": "ema_results",
-            "results": {
-                "title": "Biopsy Results",
-                "content": "• Duodenal mucosa shows villous atrophy\n• Intraepithelial lymphocytes increased\n• Crypt hyperplasia present\n• Marsh Type 3 changes confirmed",
-                "unlocks_dialogue": [
-                    "endoscopy_results"
-                ]
-            }
-        },
-        "stool-test": {
-            "name": "Stool Analysis",
-            "unlocks_at": "diarrhea_details",
-            "results": {
-                "title": "Stool Test Results",
-                "content": "• Steatorrhea present\n• Fecal fat: 12g/24h (Normal <7)\n• No infectious organisms found",
-                "unlocks_dialogue": [
-                    "stool_results"
-                ]
+                "title": "Blue Vision Chromatic Perception Test Results",
+                "content": "• Abnormal S-cone photoreceptor activity detected\n• Increased blue spectrum sensitivity: 237% above normal range\n• Normal rod cell function\n• Tritan axis color discrimination deficiency confirmed\n• Results consistent with Acquired Tritanomaly",
+                "unlocks_dialogue": ["why_blue"]
             }
         }
     },
     "conversation": {
         "start": {
             "id": "start",
-            "patient_message": "Doctor, I've been having digestive issues for months. I just can't seem to get better.",
+            "patient_message": "Doctor, I've been having weird issues for months.",
             "options": [
                 {
-                    "text": "Let's start with your main symptoms. What are you experiencing?",
+                    "text": "What kind of issues?",
                     "next": "primary_symptoms"
-                },
-                {
-                    "text": "How has this affected your daily life?",
-                    "next": "impact"
                 }
             ]
         },
         "primary_symptoms": {
             "id": "primary_symptoms",
-            "patient_message": "Chronic diarrhea, stomach cramps, and this overwhelming fatigue.",
+            "patient_message": "Well, my left foot is shrinking and sometimes I see blue.",
             "options": [
                 {
-                    "text": "How long have you had these symptoms?",
-                    "next": "symptom_duration"
+                    "text": "Your foot is shrinking?",
+                    "next": "foot"
                 },
                 {
-                    "text": "Can you describe your bowel movements?",
-                    "next": "diarrhea_details"
-                },
-                {
-                    "text": "Have you noticed any weight changes?",
-                    "next": "weight_changes"
+                    "text": "What do you mean you see blue?",
+                    "next": "blue"
                 }
             ]
         },
-        "diarrhea_details": {
-            "id": "diarrhea_details",
-            "patient_message": "It's frequent, pale, and foul-smelling. Sometimes it looks oily.",
+        "foot": {
+            "id": "foot",
+            "patient_message": "Yeah, I used to be a size 11, now I'm a size 9. It's weird.",
             "options": [
                 {
-                    "text": "That's important. Let's order a stool analysis.",
-                    "next": "stool_test_order",
-                    "unlocks_test": "stool-test"
-                },
-                {
-                    "text": "Have you seen blood in your stool?",
-                    "next": "blood_in_stool"
-                },
-                {
-                    "text": "Let's circle back to other symptoms",
-                    "next": "primary_symptoms"
+                    "text": "But only on your left foot?",
+                    "next": "left_foot"
                 }
             ]
         },
-        "symptom_duration": {
-            "id": "symptom_duration",
-            "patient_message": "About 6 months, but it's gotten worse in the last 2 months.",
+        "end_consultation": {
+            "id": "end_consultation",
+            "patient_message": "No, I think that covers everything.",
             "options": [
                 {
-                    "text": "Has anything helped relieve symptoms?",
-                    "next": "relief_methods"
-                },
-                {
-                    "text": "Have you tried dietary changes?",
-                    "next": "diet_questions"
+                    "no_option": "Thank you for coming in today. Take care!"
                 }
             ]
         },
-        "diet_questions": {
-            "id": "diet_questions",
-            "patient_message": "I tried cutting out dairy, but it didn't help. I eat a lot of pasta and bread though.",
+        "left_foot": {
+            "id": "left_foot",
+            "patient_message": "Yep. Right foot is still size 11.",
             "options": [
                 {
-                    "text": "Any family history of digestive issues?",
-                    "next": "family_history"
-                },
-                {
-                    "text": "Have you experienced brain fog?",
-                    "next": "neuro_symptoms"
+                    "no_option": "Let's order a special blood test to investigate this unusual symptom."
                 }
             ]
         },
-        "cbc_results": {
-            "id": "cbc_results",
-            "patient_message": "Tell me good news, Doc.",
+        "foot_results": {
+            "id": "foot_results",
+            "patient_message": "Did my foot results come in?",
             "options": [
                 {
-                    "text": "Looks like your hemoglobin is low. We should check for Malabsorption.",
-                    "next": "absorption_issues"
-                },
-                {
-                    "text": "Let's investigate dietary causes",
-                    "next": "diet_questions"
+                    "text": "They did. I'm afraid to look at them.",
+                    "next": "afraid_to_look"
                 }
             ]
         },
-        "ttg-iga_results": {
-            "id": "ttg-iga_results",
-            "patient_message": "Positive antibodies? What does that indicate?",
+        "afraid_to_look": {
+            "id": "afraid_to_look",
+            "patient_message": "Doc, you gotta tell me!",
             "options": [
                 {
-                    "text": "This strongly suggests Celiac Disease. We need confirmatory testing.",
-                    "next": "ema_results"
-                },
-                {
-                    "text": "We should also check for vitamin deficiencies",
-                    "next": "vitamin_tests"
+                    "text": "Ok. It looks like your foot is shrinking due to a rare disease called 'Shrinkfoot'. It's a genetic condition that causes the foot to shrink over time.",
+                    "next": "shrinkfoot"
                 }
             ]
         },
-        "ema_results": {
-            "id": "ema_results",
-            "patient_message": "Another positive test? What's next?",
+        "shrinkfoot": {
+            "id": "shrinkfoot",
+            "patient_message": "Is it curable!!",
             "options": [
                 {
-                    "text": "We need an endoscopy to confirm diagnosis",
-                    "next": "endoscopy_results"
-                },
-                {
-                    "text": "Let's discuss genetic factors",
-                    "next": "genetic_testing"
+                    "text": "No. I'm sorry, it is not.",
+                    "next": "check_next"
                 }
             ]
         },
-        "endoscopy_results": {
-            "id": "endoscopy_results",
-            "patient_message": "Villous atrophy? Does this mean Celiac Disease?",
+        "blue": {
+            "id": "blue",
+            "patient_message": "I mean like, sometimes the world is tinted blue. It happens when I look at the sky.",
             "options": [
                 {
-                    "text": "Yes, this confirms Celiac. Let's discuss gluten-free diet.",
-                    "next": "diagnosis_confirmed"
-                },
-                {
-                    "text": "We should rule out other rare causes",
-                    "next": "differential_diagnosis"
+                    "text": "Have you seen an opthamologist?",
+                    "next": "opthamologist"
                 }
             ]
         },
-        "absorption_issues": {
-            "id": "absorption_issues",
-            "patient_message": "Malabsorption? How do we check that?",
+        "check_next": {
+            "id": "check_next",
+            "alt": "check_next_alt",
+            "patient_message": "What about my seeing blue?",
             "options": [
                 {
-                    "text": "Let's look at your diet and test for food antibodies",
-                    "next": "diet_questions"
-                },
-                {
-                    "text": "We should do imaging of your small intestine",
-                    "next": "imaging_options"
+                    "text": "Oh! I had forgotten about that. Thanks for reminding me. Have you seen an opthamologist?",
+                    "next": "opthamologist"
                 }
             ]
         },
-        "weight_changes": {
-            "id": "weight_changes",
-            "patient_message": "I've lost about 15 pounds without trying. My appetite comes and goes.",
+        "check_next_alt": {
+            "id": "check_next_alt",
+            "patient_message": "Of course not.",
             "options": [
                 {
-                    "text": "This suggests absorption issues. Tell me more about your diet.",
-                    "next": "diet_questions"
-                },
-                {
-                    "text": "Have you experienced any abdominal pain with eating?",
-                    "next": "pain_after_meals"
+                    "text": "Well. It's going to be alright. At least it is not fatal. Anything else bothering you?",
+                    "next": "end_consultation"
                 }
             ]
         },
-        "impact": {
-            "id": "impact",
-            "patient_message": "I've had to take sick leave from work. Even basic tasks exhaust me.",
+        "opthamologist": {
+            "id": "opthamologist",
+            "patient_message": "Yes, I have. They said it was just because I was getting older.",
             "options": [
                 {
-                    "text": "Let's focus on your physical symptoms first",
-                    "next": "primary_symptoms"
+                    "text": "What did they say about the blue tint?",
+                    "next": "blue_tint"
                 }
             ]
         },
-        "blood_in_stool": {
-            "id": "blood_in_stool",
-            "patient_message": "No blood, but sometimes mucus. Why does that matter?",
+        "blue_tint": {
+            "id": "blue_tint",
+            "patient_message": "They said it was just because I was getting older.",
             "options": [
                 {
-                    "text": "Mucus can indicate inflammation. Let's check stool samples",
-                    "next": "stool_test_order",
-                    "unlocks_test": "stool-test"
-                },
-                {
-                    "text": "This might suggest different conditions. Let's revisit symptoms",
-                    "next": "primary_symptoms"
+                    "no_option": "Let's order a special test to investigate this."
                 }
             ]
         },
-        "relief_methods": {
-            "id": "relief_methods",
-            "patient_message": "Fasting helps sometimes, but I get dizzy if I don't eat.",
+        "why_blue": {
+            "id": "why_blue",
+            "patient_message": "I'm glad that test didn't hurt. What did we find out?",
             "options": [
                 {
-                    "text": "Food-related symptoms are important. Describe your typical meals",
-                    "next": "diet_questions"
+                    "text": "You've got a rare condition called 'Blue Tint Syndrome'. It's a genetic condition that causes the world to appear blue.",
+                    "next": "blue_syndrome"
                 }
             ]
         },
-        "neuro_symptoms": {
-            "id": "neuro_symptoms",
-            "patient_message": "Yes! I forget simple words and get tingling in my hands.",
+        "blue_syndrome": {
+            "id": "blue_syndrome",
+            "patient_message": "I'm guessing it is not curable.",
             "options": [
                 {
-                    "text": "Neurological symptoms can indicate vitamin deficiencies",
-                    "next": "vitamin_tests"
-                },
-                {
-                    "text": "This connects to malabsorption. Let's investigate diet",
-                    "next": "diet_questions"
+                    "text": "Nope. So sorry",
+                    "next": "what_else"
                 }
             ]
         },
-        "vitamin_tests": {
-            "id": "vitamin_tests",
-            "patient_message": "Could vitamins explain all these different symptoms?",
+        "what_else": {
+            "id": "what_else",
+            "alt": "what_else_alt",
+            "patient_message": "What about my foot?",
             "options": [
                 {
-                    "text": "First we need to find why you're not absorbing nutrients",
-                    "next": "absorption_issues"
+                    "text": "Oh! Right. lol Tell me about it. You said your foot is shrinking?",
+                    "next": "foot"
                 }
             ]
         },
-        "imaging_options": {
-            "id": "imaging_options",
-            "patient_message": "Would a scan show what's wrong with my intestines?",
+        "what_else_alt": {
+            "id": "what_else_alt",
+            "patient_message": "That sucks man. That really sucks.",
             "options": [
                 {
-                    "text": "Imaging has limitations. Let's try antibody testing first",
-                    "next": "diet_questions"
-                },
-                {
-                    "text": "We might consider CT enterography later. First basic tests",
-                    "next": "primary_symptoms"
-                }
-            ]
-        },
-        "genetic_testing": {
-            "id": "genetic_testing",
-            "patient_message": "My aunt has Celiac Disease. Is that relevant?",
-            "options": [
-                {
-                    "text": "Family history increases suspicion! Let's confirm with biopsy",
-                    "next": "endoscopy_results"
-                }
-            ]
-        },
-        "differential_diagnosis": {
-            "id": "differential_diagnosis",
-            "patient_message": "What else could cause these results?",
-            "options": [
-                {
-                    "text": "Rare possibilities exist, but Celiac is most likely",
-                    "next": "diagnosis_confirmed"
-                },
-                {
-                    "text": "We should check for Crohn's disease via colonoscopy",
-                    "next": "primary_symptoms"
-                }
-            ]
-        },
-        "family_history": {
-            "id": "family_history",
-            "patient_message": "My mother had thyroid issues and my sister has rheumatoid arthritis.",
-            "options": [
-                {
-                    "text": "Let's focus on your direct symptoms first",
-                    "next": "primary_symptoms"
-                }
-            ]
-        },
-        "stool_test_order": {
-            "id": "stool_test_order",
-            "patient_message": "I'll provide a sample. What are we looking for exactly?",
-            "options": [
-                {
-                    "text": "Analyze for fat malabsorption",
-                    "next": "stool_results"
-                }
-            ]
-        },
-        "stool_results": {
-            "id": "stool_results",
-            "patient_message": "Did everything come out alright?",
-            "options": [
-                {
-                    "text": "Yes, it seems everything there was fine. Let's go back and discuss your primary symptoms again.",
-                    "next": "primary_symptoms"
-                }
-            ]
-        },
-        "pain_after_meals": {
-            "id": "pain_after_meals",
-            "patient_message": "Yes, especially after eating pasta or bread. Why?",
-            "options": [
-                {
-                    "text": "Could indicate food intolerance. Let's investigate further",
-                    "next": "diet_questions"
+                    "text": "I know it's a lot to take in. Is there anything else you'd like to discuss?",
+                    "next": "end_consultation"
                 }
             ]
         }

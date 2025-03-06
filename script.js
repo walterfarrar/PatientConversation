@@ -181,6 +181,15 @@ class ConversationManager {
         // Add patient's message to the conversation history
         this.addMessage(this.currentNode.patient_message, true);  // true for patient message
         
+        // Check if this is a no-option dialogue
+        if (this.currentNode.options.length === 1 && this.currentNode.options[0].no_option) {
+            const messageDiv = document.createElement('p');
+            messageDiv.className = 'end-message';
+            messageDiv.textContent = this.currentNode.options[0].no_option;
+            document.getElementById('response-options').appendChild(messageDiv);
+            return;
+        }
+        
         // Display doctor's response options
         this.displayOptions(this.currentNode.options);
     }
@@ -195,8 +204,22 @@ class ConversationManager {
         // Add back the test result options
         testResultOptions.forEach(option => optionsContainer.appendChild(option));
 
+        // Check if this is a no-option dialogue
+        if (options.length === 1 && options[0].no_option) {
+            const messageDiv = document.createElement('p');
+            messageDiv.className = 'end-message';
+            messageDiv.textContent = options[0].no_option;
+            optionsContainer.appendChild(messageDiv);
+            return;
+        }
+
         // Add the current conversation options
         options.forEach(option => {
+            // Skip creating buttons for no-option messages
+            if (option.no_option) {
+                return;
+            }
+            
             const button = document.createElement('button');
             button.className = 'option-button';
             button.textContent = option.text;
@@ -207,6 +230,11 @@ class ConversationManager {
 
     handleOptionSelection(option) {
         console.log('Option selected:', option);
+        
+        // Clear the options container before proceeding
+        const optionsContainer = document.getElementById('response-options');
+        optionsContainer.innerHTML = '';
+        
         // Add doctor's message to the conversation history
         this.addMessage(option.text, false);  // false for doctor message
         
@@ -220,8 +248,24 @@ class ConversationManager {
             }
         }
         
+        // Get the next node
+        let nextNode = this.conversationData.conversation[option.next];
+        
+        // Check if we have an alt path and if we've visited any nodes in the next path
+        if (nextNode && nextNode.alt) {
+            // Get all nodes that would be visited in this path
+            let pathNodes = this.getPathNodes(nextNode);
+            console.log('Checking path nodes:', pathNodes);
+            
+            // Check if we've visited any of these nodes
+            if (pathNodes.some(nodeId => this.visitedNodes.has(nodeId))) {
+                console.log('Found visited node in path, using alt');
+                nextNode = this.conversationData.conversation[nextNode.alt];
+            }
+        }
+        
         // Move to the next conversation node
-        this.currentNode = this.conversationData.conversation[option.next];
+        this.currentNode = nextNode;
         console.log('Next node:', this.currentNode);
         
         if (this.currentNode) {
@@ -239,19 +283,47 @@ class ConversationManager {
         }
     }
 
+    // Helper method to get all nodes in a path
+    getPathNodes(startNode) {
+        let nodes = new Set([startNode.id]);
+        
+        // If the node has options, follow them
+        if (startNode.options) {
+            startNode.options.forEach(option => {
+                if (option.next) {
+                    let nextNode = this.conversationData.conversation[option.next];
+                    if (nextNode) {
+                        // Add the next node and recursively get its path nodes
+                        nodes.add(nextNode.id);
+                        this.getPathNodes(nextNode).forEach(id => nodes.add(id));
+                    }
+                }
+            });
+        }
+        
+        return Array.from(nodes);
+    }
+
     checkForUnlockedTests() {
         const testButtons = document.querySelectorAll('.test-button');
         testButtons.forEach(button => {
             const testId = button.dataset.test;
             const test = this.conversationData.tests[testId];
             
-            // If test is already completed or visited its unlock node, skip
-            if (this.completedTests.has(testId) || this.visitedNodes.has(test.unlocks_at)) {
+            // If test is already completed, skip
+            if (this.completedTests.has(testId)) {
+                return;
+            }
+
+            // Handle both string and array formats for unlocks_at
+            const unlockConditions = Array.isArray(test.unlocks_at) ? test.unlocks_at : [test.unlocks_at];
+            
+            // Check if any of the unlock conditions have been met
+            const shouldUnlock = unlockConditions.some(condition => this.visitedNodes.has(condition));
+            
+            if (shouldUnlock) {
                 button.disabled = false;
                 button.classList.remove('locked');
-            } else {
-                button.disabled = true;
-                button.classList.add('locked');
             }
         });
     }
