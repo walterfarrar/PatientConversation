@@ -32,33 +32,126 @@ header h1 {
     gap: 20px;
 }
 
-.conversation-container {
-    flex: 1;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-.side-panel {
+.navigation-panel {
     width: 250px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
 }
 
-.side-panel h3 {
+.navigation-panel h3 {
     color: #2c3e50;
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    flex-grow: 1;
+    justify-content: space-evenly;
+}
+
+.nav-button {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left;
+    width: 100%;
+    font-size: 1.1em;
+    position: relative;
+}
+
+.nav-button:hover {
+    background-color: #2980b9;
+}
+
+.nav-button.active {
+    background-color: #2980b9;
+    font-weight: bold;
+}
+
+.nav-button .notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.nav-button .notification-badge.hidden {
+    display: none;
+}
+
+@keyframes badgePop {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.nav-button .notification-badge {
+    animation: badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.content-panels {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    min-height: 600px;
+}
+
+.panel {
+    display: none;
+    height: 100%;
+}
+
+.panel.active {
+    display: block;
+}
+
+.placeholder-content {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.placeholder-content p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
 .test-buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: calc(100% - 50px);
+    overflow-y: auto;
 }
 
 .test-button {

@@ -75,6 +75,30 @@ class ConversationManager {
         };
     }
 
+    showNotificationBadge(panelId) {
+        const button = document.querySelector(`.nav-button[data-panel="${panelId}"]`);
+        if (button) {
+            const badge = button.querySelector('.notification-badge');
+            if (badge) {
+                badge.classList.remove('hidden');
+                // Reset animation
+                badge.style.animation = 'none';
+                badge.offsetHeight; // Trigger reflow
+                badge.style.animation = null;
+            }
+        }
+    }
+
+    hideNotificationBadge(panelId) {
+        const button = document.querySelector(`.nav-button[data-panel="${panelId}"]`);
+        if (button) {
+            const badge = button.querySelector('.notification-badge');
+            if (badge) {
+                badge.classList.add('hidden');
+            }
+        }
+    }
+
     handleTestOrder(testId) {
         console.log('Test order clicked:', testId);
         const test = this.conversationData.tests[testId];
@@ -101,6 +125,13 @@ class ConversationManager {
         if (test.results.unlocks_dialogue) {
             console.log('Adding dialogue options:', test.results.unlocks_dialogue);
             this.addNewDialogueOptions(test.results.unlocks_dialogue);
+            // Show notification badge on "Conversation" button
+            this.showNotificationBadge('conversation');
+        }
+
+        // Hide the notification badge from "Order Tests" button when test is completed
+        if (document.querySelectorAll('.test-button:not(.completed)').length === 0) {
+            this.hideNotificationBadge('order-tests');
         }
     }
 
@@ -306,6 +337,8 @@ class ConversationManager {
 
     checkForUnlockedTests() {
         const testButtons = document.querySelectorAll('.test-button');
+        let newTestUnlocked = false;
+        
         testButtons.forEach(button => {
             const testId = button.dataset.test;
             const test = this.conversationData.tests[testId];
@@ -321,11 +354,17 @@ class ConversationManager {
             // Check if any of the unlock conditions have been met
             const shouldUnlock = unlockConditions.some(condition => this.visitedNodes.has(condition));
             
-            if (shouldUnlock) {
+            if (shouldUnlock && button.disabled) {
                 button.disabled = false;
                 button.classList.remove('locked');
+                newTestUnlocked = true;
             }
         });
+
+        // Show notification badge on "Order Tests" button if new tests were unlocked
+        if (newTestUnlocked) {
+            this.showNotificationBadge('order-tests');
+        }
     }
 
     checkConsultationCompletion() {
@@ -373,6 +412,42 @@ class ConversationManager {
 }
 
 // Initialize the conversation when the page loads
+let conversationManager; // Make it accessible globally
+
 document.addEventListener('DOMContentLoaded', () => {
-    new ConversationManager();
+    conversationManager = new ConversationManager();
+
+    // Add panel switching functionality
+    const navButtons = document.querySelectorAll('.nav-button');
+    const panels = document.querySelectorAll('.panel');
+    
+    // Initially hide all panels except the active one
+    panels.forEach(panel => {
+        if (!panel.classList.contains('active')) {
+            panel.style.display = 'none';
+        }
+    });
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetPanelId = button.getAttribute('data-panel');
+            
+            // Remove active class from all buttons and hide all panels
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                panel.style.display = 'none';
+            });
+            
+            // Activate the selected button and panel
+            button.classList.add('active');
+            const targetPanel = document.getElementById(targetPanelId);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+                targetPanel.style.display = 'block';
+                // Hide notification badge when panel is opened
+                conversationManager.hideNotificationBadge(targetPanelId);
+            }
+        });
+    });
 });

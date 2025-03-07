@@ -9,12 +9,33 @@
 <body>
     <div class="container">
         <header>
-            <h1>Virtual Patient Consultation</h1>
+            <h1>Medical Consultation Simulator</h1>
         </header>
         
-        <main>
-            <div class="content-wrapper">
-                <div class="conversation-container">
+        <div class="content-wrapper">
+            <div class="navigation-panel">
+                <h3>Navigation</h3>
+                <div class="nav-buttons">
+                    <button class="nav-button" data-panel="physical-exam">Physical Exam<span class="notification-badge hidden">1</span></button>
+                    <button class="nav-button active" data-panel="conversation">Conversation<span class="notification-badge hidden">1</span></button>
+                    <button class="nav-button" data-panel="order-tests">Order Tests<span class="notification-badge hidden">1</span></button>
+                    <button class="nav-button" data-panel="diagnosis">Diagnosis<span class="notification-badge hidden">1</span></button>
+                </div>
+            </div>
+            
+            <div class="content-panels">
+                <div id="physical-exam" class="panel">
+                    <h2>Physical Examination</h2>
+                    <p>Here you can perform a physical examination of the patient. Select different examination types and record your findings.</p>
+                    <div class="placeholder-content">
+                        <p>Physical examination options will be available here.</p>
+                        <p>- General appearance</p>
+                        <p>- Vital signs</p>
+                        <p>- System-specific examinations</p>
+                    </div>
+                </div>
+
+                <div id="conversation" class="panel active">
                     <div class="patient-info">
                         <div class="avatar">👤</div>
                         <div class="patient-details">
@@ -25,21 +46,32 @@
                     
                     <div class="chat-area">
                         <div id="conversation-history" class="conversation-history"></div>
-                        
                         <div class="options-container">
                             <div id="response-options" class="response-options"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="side-panel">
-                    <h3>Available Tests</h3>
+                <div id="order-tests" class="panel">
+                    <h2>Available Tests</h2>
                     <div class="test-buttons">
                         <!-- Test buttons will be added dynamically -->
                     </div>
                 </div>
+
+                <div id="diagnosis" class="panel">
+                    <h2>Patient Diagnosis</h2>
+                    <p>Record your diagnosis and treatment plan for the patient based on examination, conversation, and test results.</p>
+                    <div class="placeholder-content">
+                        <p>Diagnosis form will include:</p>
+                        <p>- Primary diagnosis</p>
+                        <p>- Differential diagnoses</p>
+                        <p>- Treatment plan</p>
+                        <p>- Follow-up recommendations</p>
+                    </div>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Test Results Modal -->
